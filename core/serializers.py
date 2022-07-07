@@ -13,4 +13,4 @@ class MovieSerializer(ModelSerializer):
 
     class Meta:
         model = Movie
-        fields = '__all__'
+        exclude = ['cast']

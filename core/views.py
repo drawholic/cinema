@@ -1,4 +1,4 @@
-from rest_framework.generics import GenericAPIView, ListAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
 from .models import Movie
 from .serializers import MovieSerializer
@@ -21,4 +21,12 @@ class MovieListView(ListAPIView):
 
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data)
+
+
+class BookingView(RetrieveUpdateAPIView):
+    serializer_class = MovieSerializer
+    queryset = Movie.objects.all()
+
+    def put(self, request, *args, **kwargs):
+        return Response('okay, heres your ticket')
 
