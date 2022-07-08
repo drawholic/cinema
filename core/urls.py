@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import Main, MovieListView, BookingView
-
+from .views import  MovieListView, ReservationView, MovieDetailView, UserMoviesView
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
-    path('', Main.as_view()),
     path('movies/', MovieListView.as_view()),
-    path('movies/<int:pk>/', BookingView.as_view())
+    path('movies/<int:pk>/', MovieDetailView.as_view()),
+    path('movies/<int:pk>/reserve/', ReservationView.as_view()),
+    path('token/', obtain_auth_token),
+    path('movies/reserved/', UserMoviesView.as_view())
 ]
