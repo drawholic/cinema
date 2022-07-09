@@ -1,9 +1,10 @@
 import rest_framework.permissions
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from .models import Movie, Reservation
+from .models import Movie, Reservation, Actor
 from .serializers import MovieSerializer, ReservationSerializer, UserMovies
 from django.contrib.auth.models import User
+from django.db import connection
 
 
 class UserMoviesView(RetrieveAPIView):
@@ -11,10 +12,8 @@ class UserMoviesView(RetrieveAPIView):
     serializer_class = UserMovies
 
     def get(self, request):
-        user = User.objects.get(id=request.user.id)
-        print(user.reservation_set.all())
+        user = self.queryset.objects.get(id=request.user.id)
         serializer = self.serializer_class(user)
-        # print(serializer.data)
         return Response(serializer.data)
 
 
@@ -23,12 +22,10 @@ class MovieListView(ListAPIView):
     serializer_class = MovieSerializer
 
     def get(self, request):
-        movies = Movie.objects.all()
-
-        for movie in movies:
-            movie.cast.set(movie.cast.all())
+        movies = Movie.objects.prefetch_related('cast').all()
 
         serializer = MovieSerializer(movies, many=True)
+
         return Response(serializer.data)
 
 

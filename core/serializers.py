@@ -16,6 +16,7 @@ class MovieSerializer(ModelSerializer):
     class Meta:
         model = Movie
         exclude = ['cast']
+        # fields = '__all__'
 
 
 class ReservationSerializer(ModelSerializer):
